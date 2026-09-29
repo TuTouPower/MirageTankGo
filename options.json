@@ -1,6 +1,6 @@
 {
-  "whiteImg": "white.jpg",
-  "blackImg": "black.jpg",
+  "whiteImg": "/Users/zhangfeng19/Downloads/\u4e0b\u8f7d.jpeg",
+  "blackImg": "/Users/zhangfeng19/Downloads/\u5fae\u4fe1\u7d20\u6750_3.png",
   "outputImg": "remu.png",
   "whiteLight": 1.0,
   "blackLight": 0.2,

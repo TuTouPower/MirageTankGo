@@ -52,9 +52,9 @@ if __name__ == '__main__':
         if argv['--scale']:
             whiteScale, blackScale = argv['--scale'].split('-')
             whiteImg = whiteImg.resize((round(x * float(whiteScale))
-                                        for x in whiteImg.size), Image.ANTIALIAS)
+                                        for x in whiteImg.size), Image.Resampling.LANCZOS)
             blackImg = blackImg.resize((round(x * float(blackScale))
-                                        for x in blackImg.size), Image.ANTIALIAS)
+                                        for x in blackImg.size), Image.Resampling.LANCZOS)
         if argv['--light']:
             light = argv['--light'].split('-')
             kwargs['whiteLight'] = float(light[0])

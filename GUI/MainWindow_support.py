@@ -17,14 +17,12 @@ from operator import methodcaller
 
 import json
 
-try:
-    from Tkinter import *
-except ImportError:
-    from tkinter import *
-    import tkinter.filedialog as filedialog
-    import tkinter.messagebox as messagebox
-    from PIL import Image
-    from PIL import ImageTk
+import tkinter as tk
+import tkinter.filedialog as filedialog
+import tkinter.messagebox as messagebox
+from PIL import Image
+from PIL import ImageTk
+import sys
 
 try:
     from MTCore import CMTCore as MTCore
@@ -40,37 +38,37 @@ except ImportError:
 
 def set_Tk_var():
     global whiteImg
-    whiteImg = StringVar()
+    whiteImg = tk.StringVar()
 
     global blackImg
-    blackImg = StringVar()
+    blackImg = tk.StringVar()
 
     global outputImg
-    outputImg = StringVar()
+    outputImg = tk.StringVar()
 
     global blackLight
-    blackLight = DoubleVar()
+    blackLight = tk.DoubleVar()
 
     global whiteLight
-    whiteLight = DoubleVar()
+    whiteLight = tk.DoubleVar()
 
     global whiteColor
-    whiteColor = DoubleVar()
+    whiteColor = tk.DoubleVar()
 
     global blackColor
-    blackColor = DoubleVar()
+    blackColor = tk.DoubleVar()
 
     global blackScale
-    blackScale = DoubleVar()
+    blackScale = tk.DoubleVar()
 
     global whiteScale
-    whiteScale = DoubleVar()
+    whiteScale = tk.DoubleVar()
 
     global enableChess
-    enableChess = BooleanVar()
+    enableChess = tk.BooleanVar()
 
     global colorfulCar
-    colorfulCar = BooleanVar()
+    colorfulCar = tk.BooleanVar()
 
     with open('options.json') as f:
         options = json.load(f)
@@ -132,7 +130,7 @@ def blackBrowser():
     print('MainWindow_support.whiteBrowser')
     filename = filedialog.askopenfilename(filetypes=[('任何图片', '.*')])
     if filename:
-        w.eblackImg.delete(0, END)
+        w.eblackImg.delete(0, tk.END)
         w.eblackImg.insert(0, filename)
     sys.stdout.flush()
 
@@ -141,7 +139,7 @@ def whiteBrowser():
     print('MainWindow_support.whiteBrowser')
     filename = filedialog.askopenfilename(filetypes=[('任何图片', '.*')])
     if filename:
-        w.ewhiteImg.delete(0, END)
+        w.ewhiteImg.delete(0, tk.END)
         w.ewhiteImg.insert(0, filename)
     sys.stdout.flush()
 
@@ -150,7 +148,7 @@ def outputBrowser():
     print('MainWindow_support.outputBrowser')
     filename = filedialog.asksaveasfilename(filetypes=[('png图片', '.png')])
     if filename:
-        w.eoutputImg.delete(0, END)
+        w.eoutputImg.delete(0, tk.END)
         w.eoutputImg.insert(0, filename)
     sys.stdout.flush()
 
@@ -180,8 +178,8 @@ def tryBuild(justATry=True):
     # 调整大小
     _whiteScale = whiteScale.get()
     _blackScale = blackScale.get()
-    _whiteImg = _whiteImg.resize((round(x * _whiteScale) for x in _whiteImg.size), Image.ANTIALIAS)
-    _blackImg = _blackImg.resize((round(x * _blackScale) for x in _blackImg.size), Image.ANTIALIAS)
+    _whiteImg = _whiteImg.resize((round(x * _whiteScale) for x in _whiteImg.size), Image.Resampling.LANCZOS)
+    _blackImg = _blackImg.resize((round(x * _blackScale) for x in _blackImg.size), Image.Resampling.LANCZOS)
 
     # 预览模式下, 先进行自定义比例的调整, 再以大的图像为标准进行等比例缩小
     if justATry:
@@ -189,8 +187,8 @@ def tryBuild(justATry=True):
         _whiteScale = min([size[i] / _whiteImg.size[i] for i in range(2)])
         _blackScale = min([size[i] / _blackImg.size[i] for i in range(2)])
         _sacle = min(_whiteScale, _blackScale)
-        _whiteImg = _whiteImg.resize((round(x * _sacle) for x in _whiteImg.size), Image.ANTIALIAS)
-        _blackImg = _blackImg.resize((round(x * _sacle) for x in _blackImg.size), Image.ANTIALIAS)
+        _whiteImg = _whiteImg.resize((round(x * _sacle) for x in _whiteImg.size), Image.Resampling.LANCZOS)
+        _blackImg = _blackImg.resize((round(x * _sacle) for x in _blackImg.size), Image.Resampling.LANCZOS)
 
     if not colorfulCar.get():
         output = MTCore.gray_car(_whiteImg, _blackImg, whiteLight.get(), blackLight.get(), _enableChess)
@@ -227,7 +225,7 @@ def init(top, gui, *args, **kwargs):
         # TODO: 动态获取
         size = (340, 485)
         scale = min([size[i] / remu.size[i] for i in range(2)])
-        remu = remu.resize((round(x * scale) for x in remu.size), Image.ANTIALIAS)
+        remu = remu.resize((round(x * scale) for x in remu.size), Image.Resampling.LANCZOS)
         w._img = ImageTk.PhotoImage(remu)
         w.showWhite.configure(image=w._img)
         w.showBlack.configure(image=w._img)
